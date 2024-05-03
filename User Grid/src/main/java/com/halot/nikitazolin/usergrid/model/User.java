@@ -11,15 +11,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@RequiredArgsConstructor
+@Data
+@NoArgsConstructor
 public class User {
 
   private Long userId;
@@ -30,7 +26,7 @@ public class User {
   @NotBlank(message = "Last name is required")
   private String lastName;
 
-  @Email(message = "Email should be valid")
+  @Email(message = "Email is not correct")
   @NotBlank(message = "Email is required")
   private String email;
 
@@ -42,6 +38,6 @@ public class User {
 
   private String address;
 
-  @Pattern(regexp = "^\\+?[1-9]\\d{1,14}$", message = "Phone number must be valid")
+  @Pattern(regexp = "^\\+?[1-9]\\d{1,14}$", message = "Phone number is not correct")
   private String phoneNumber;
 }
