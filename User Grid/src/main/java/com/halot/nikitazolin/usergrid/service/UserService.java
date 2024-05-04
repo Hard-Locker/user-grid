@@ -76,15 +76,21 @@ public class UserService {
     userFields.forEach((field, value) -> {
       switch (field) {
       case "firstName":
-        existingUser.setFirstName((String) value);
+        if (value instanceof String) {
+          existingUser.setFirstName((String) value);
+        }
         break;
 
       case "lastName":
-        existingUser.setLastName((String) value);
+        if (value instanceof String) {
+          existingUser.setLastName((String) value);
+        }
         break;
 
       case "email":
-        existingUser.setEmail((String) value);
+        if (value instanceof String) {
+          existingUser.setEmail((String) value);
+        }
         break;
 
       case "birthDate":
@@ -94,11 +100,15 @@ public class UserService {
         break;
 
       case "address":
-        existingUser.setAddress((String) value);
+        if (value instanceof String) {
+          existingUser.setAddress((String) value);
+        }
         break;
 
       case "phoneNumber":
-        existingUser.setPhoneNumber((String) value);
+        if (value instanceof String) {
+          existingUser.setPhoneNumber((String) value);
+        }
         break;
 
       default:
@@ -126,9 +136,9 @@ public class UserService {
   }
 
   public List<User> findUsersByBirthDateRange(LocalDate begin, LocalDate end) {
-    List<User> findedUsers = users.values().stream()
-        .filter(user -> user.getBirthDate() != null)
-        .filter(user -> (user.getBirthDate().isEqual(begin) || user.getBirthDate().isAfter(begin)) && (user.getBirthDate().isEqual(end) || user.getBirthDate().isBefore(end)))
+    List<User> findedUsers = users.values().stream().filter(user -> user.getBirthDate() != null)
+        .filter(user -> (user.getBirthDate().isEqual(begin) || user.getBirthDate().isAfter(begin))
+            && (user.getBirthDate().isEqual(end) || user.getBirthDate().isBefore(end)))
         .toList();
 
     log.info("Get users quantity: " + findedUsers.size());
