@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.halot.nikitazolin</groupId>
   <artifactId>user-grid</artifactId>
-  <version>0.0.6</version>
+  <version>0.1.0</version>
   <packaging>war</packaging>
   <name>User Grid</name>
-  <description>Java practical test for Clear Solutions</description>
+  <description>Demonstrate basic RESTful API functionality</description>
 
   <properties>
     <java.version>21</java.version>
