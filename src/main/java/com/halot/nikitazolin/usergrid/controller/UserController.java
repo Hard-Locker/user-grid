@@ -8,6 +8,8 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -34,19 +36,24 @@ public class UserController {
 
   private final UserService userService;
 
-  @GetMapping("/hello")
-  public ResponseEntity<String> sayHello() {
-    String goodbye = "Hello";
-    log.debug("Was call @GetMapping with data: " + goodbye);
+  @GetMapping("/about")
+  public ResponseEntity<String> about() {
+    String about = "Hello";
+    log.debug("Was call @GetMapping with data: " + about);
 
-    return ResponseEntity.ok(goodbye);
+    return ResponseEntity.ok(about);
   }
 
   @PostMapping("/add")
-  public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
+  public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult result) {
     log.info("Attempting to create a new user with details: {}", user);
-    Optional<User> createdUser = userService.addUser(user);
 
+    if (result.hasErrors()) {
+      List<String> errorMessages = result.getAllErrors().stream().map(ObjectError::getDefaultMessage).toList();
+      return ResponseEntity.badRequest().body(errorMessages);
+    }
+
+    Optional<User> createdUser = userService.addUser(user);
     if (createdUser.isPresent()) {
       log.info("User created successfully: " + createdUser.get());
       return ResponseEntity.status(HttpStatus.CREATED).body(createdUser.get());
@@ -96,6 +103,20 @@ public class UserController {
       log.warn("Failed to delete user with id: {}", userId);
       return ResponseEntity.notFound().build();
     }
+  }
+
+  @GetMapping("/find/{userId}")
+  public ResponseEntity<User> findUserById(@PathVariable Long userId) {
+    log.info("Searching user by ID: {}", userId);
+    Optional<User> user = userService.findUserById(userId);
+
+    return user.map(u -> {
+      log.info("User with id: {} find successfully.", userId);
+      return ResponseEntity.ok(u);
+    }).orElseGet(() -> {
+      log.warn("Failed to find user with id: {}", userId);
+      return ResponseEntity.notFound().build();
+    });
   }
 
   @GetMapping("/find/byDate")

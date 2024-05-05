@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Search users by birth date range</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f4f4f9;
+    }
+    h2 {
+        color: #333;
+    }
+    form {
+        margin-top: 20px;
+        text-align: center;
+    }
+    label, input {
+        margin: 10px;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+</style>
+</head>
+<body>
+    <h2>Search users by birth date range</h2>
+    <form id="searchForm">
+        <label for="beginDate">Begin date:</label>
+        <input type="date" id="beginDate" name="beginDate" required><br>
+        <label for="endDate">End date:</label>
+        <input type="date" id="endDate" name="endDate" required><br>
+
+        <button type="button" onclick="searchUsers()">Search</button>
+    </form>
+    <div id="usersContainer"></div>
+
+    <script>
+        function searchUsers() {
+            const beginDate = document.getElementById('beginDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            fetch(`/users/find/byDate?begin=${beginDate}&end=${endDate}`)
+            .then(response => response.json())
+            .then(users => {
+                const container = document.getElementById('usersContainer');
+                container.innerHTML = '';
+                if (users.length === 0) {
+                    container.innerHTML = '<p>No users found with birth date between selected dates.</p>';
+                } else {
+                    const table = document.createElement('table');
+                    table.innerHTML = `
+                        <tr>
+                            <th>ID</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Email</th>
+                            <th>Birth date</th>
+                            <th>Address</th>
+                            <th>Phone number</th>
+                        </tr>
+                    `;
+                    users.forEach(user => {
+                        const row = table.insertRow();
+                        row.innerHTML = `
+                            <td>${user.userId}</td>
+                            <td>${user.firstName}</td>
+                            <td>${user.lastName}</td>
+                            <td>${user.email}</td>
+                            <td>${user.birthDate}</td>
+                            <td>${user.address || ''}</td>
+                            <td>${user.phoneNumber || ''}</td>
+                        `;
+                    });
+                    container.appendChild(table);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('usersContainer').innerHTML = '<p>Error loading user list.</p>';
+            });
+        }
+    </script>
+</body>
+</html>

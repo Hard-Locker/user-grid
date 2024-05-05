@@ -26,7 +26,7 @@ public class UserService {
 
   // Fictional analog of database
   private Map<Long, User> users = new ConcurrentHashMap<>();
-  private AtomicLong userIdCounter = new AtomicLong(1);
+  private AtomicLong userIdCounter = new AtomicLong(0);
 
   // We fake behavior of database when adding rows
   public Optional<User> addUser(User user) {
@@ -122,16 +122,30 @@ public class UserService {
     return Optional.of(existingUser);
   }
 
-  public boolean deleteUser(Long id) {
-    if (users.containsKey(id)) {
-      log.info("Remove user: " + users.get(id));
-      users.remove(id);
+  public boolean deleteUser(Long userId) {
+    if (users.containsKey(userId)) {
+      log.info("Remove user: " + users.get(userId));
+      users.remove(userId);
 
       return true;
     } else {
-      log.info("Not find user: " + users.get(id));
+      log.info("Not find user: " + users.get(userId));
 
       return false;
+    }
+  }
+
+  public Optional<User> findUserById(Long userId) {
+    User existingUser = users.get(userId);
+
+    if (existingUser != null) {
+      log.info("Get user: {}", existingUser);
+
+      return Optional.of(existingUser);
+    } else {
+      log.info("User with ID {} not found", userId);
+
+      return Optional.empty();
     }
   }
 

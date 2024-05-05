@@ -38,6 +38,6 @@ public class User {
 
   private String address;
 
-  @Pattern(regexp = "^\\+?[1-9]\\d{1,14}$", message = "Phone number is not correct")
+  @Pattern(regexp = "^$|^\\+?[1-9]\\d{1,14}$", message = "Phone number is not correct")
   private String phoneNumber;
 }

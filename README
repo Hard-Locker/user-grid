@@ -9,6 +9,9 @@ To do this, you need to select a profile in application.yml
 "development" for embedded server.
 "external" for external server.
 
+For greater control of the transmitted data, it is recommended to use programs for generating queries (for example Postman).
+Frontend pages may not be accurate.
+
 ## Features
 
 The application can process information about persons:

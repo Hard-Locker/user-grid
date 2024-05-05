@@ -189,6 +189,30 @@ class UserServiceTest {
   }
 
   @Test
+  void findUserById_UserExists_ShouldReturnUser() {
+    // Arrange
+    User existingUser = new User();
+    existingUser.setUserId(1L);
+    userService.addUser(existingUser);
+
+    // Act
+    Optional<User> foundUser = userService.findUserById(1L);
+
+    // Assert
+    assertTrue(foundUser.isPresent(), "User should be found");
+    assertEquals(1L, foundUser.get().getUserId(), "User IDs should match");
+  }
+
+  @Test
+  void findUserById_UserDoesNotExist_ShouldReturnEmptyOptional() {
+    // Act
+    Optional<User> foundUser = userService.findUserById(1L);
+
+    // Assert
+    assertFalse(foundUser.isPresent(), "Should return empty optional for non-existing user");
+  }
+
+  @Test
   void findUsersByBirthDateRange_ValidRange_ShouldReturnUsers() {
     // Arrange
     LocalDate startDate = LocalDate.of(1990, 1, 1);

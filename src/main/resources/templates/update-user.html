@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Update user data</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f4f4f9;
+        text-align: center;
+    }
+    label, input, button {
+        margin-top: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    input, button {
+        width: 250px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    button {
+        white-space: normal; /* Allow button text to wrap */
+        line-height: 1.5; /* Increase line-height to improve readability */
+    }
+</style>
+</head>
+<body>
+    <h2>Update user data</h2>
+    <form id="searchForm">
+        <label for="userId">Enter user ID:</label>
+        <input type="number" id="userId" name="userId" required><br>
+        <button type="button" onclick="findUser()">Search</button>
+    </form>
+    <div id="userUpdateForm"></div>
+
+    <script>
+        function findUser() {
+            const userId = document.getElementById('userId').value;
+
+            fetch(`/users/find/${userId}`)
+            .then(response => response.json())
+            .then(user => {
+                const formHTML = `
+                    <h3>Update user data</h3>
+                    <label for="firstName">First name:</label>
+                    <input type="text" id="firstName" name="firstName" value="${user.firstName}"><br>
+
+                    <label for="lastName">Last name:</label>
+                    <input type="text" id="lastName" name="lastName" value="${user.lastName}"><br>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="${user.email}"><br>
+
+                    <label for="birthDate">Birth date:</label>
+                    <input type="date" id="birthDate" name="birthDate" value="${user.birthDate}"><br>
+
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" value="${user.address || ''}"><br>
+
+                    <label for="phoneNumber">Phone number:</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" value="${user.phoneNumber || ''}"><br>
+
+                    <button type="button" onclick="updateUser(${user.userId}, false)">Update only filled fields? <br>(Changing only completed information)</button>
+                    <button type="button" onclick="updateUser(${user.userId}, true)">Overwrite user? <br>(An empty field means the information in the field is deleted)</button>
+                `;
+                document.getElementById('userUpdateForm').innerHTML = formHTML;
+            })
+            .catch(error => {
+                document.getElementById('userUpdateForm').innerHTML = '<p>User not found.</p>';
+            });
+        }
+
+        function updateUser(userId, fullUpdate) {
+            const userData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                birthDate: document.getElementById('birthDate').value,
+                address: document.getElementById('address').value,
+                phoneNumber: document.getElementById('phoneNumber').value
+            };
+
+            const requestOptions = {
+                method: fullUpdate ? 'PUT' : 'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(fullUpdate ? userData : { ...userData })
+            };
+
+            fetch(`/users/${userId}`, requestOptions)
+            .then(response => response.json())
+            .then(user => {
+                document.getElementById('userUpdateForm').innerHTML = `<p>User updated successfully: ${user.firstName} ${user.lastName}</p>`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('userUpdateForm').innerHTML = '<p>Error while updating user.</p>';
+            });
+        }
+    </script>
+</body>
+</html>
