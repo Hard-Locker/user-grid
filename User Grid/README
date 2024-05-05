@@ -1,0 +1,27 @@
+# UserGrid
+
+UserGrid is intended to demonstrate the implementation of basic RESTful API functionality.
+
+## Usage
+
+Application can be run on the embedded or external Tomcat server.
+To do this, you need to select a profile in application.yml
+"development" for embedded server.
+"external" for external server.
+
+## Features
+
+The application can process information about persons:
+• Save a new person
+• Update the data of an existing person
+• Delete a person
+• Show all persons
+• Show persons by selected date range of birth
+
+## Contacts
+
+For support or inquiries, please contact us via:
+• Email: nikita.98.zolin@gmail.com
+• Discord: hard_locker
+• Telegram: https://t.me/Hard_Locker
+• Skype: https://join.skype.com/invite/FdhmsVH2OnEx

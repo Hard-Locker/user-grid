@@ -15,12 +15,11 @@ import org.springframework.web.bind.WebDataBinder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-
 @SpringBootTest
-class GlobalExceptionHandlerTest {
+class CustomExceptionHandlerTest {
 
   @InjectMocks
-  private GlobalExceptionHandler globalExceptionHandler;
+  private CustomExceptionHandler customExceptionHandler;
 
   @Test
   void handleValidationExceptions_InvalidData_BadRequest() {
@@ -30,7 +29,7 @@ class GlobalExceptionHandlerTest {
     MethodArgumentNotValidException ex = new MethodArgumentNotValidException(null, binder.getBindingResult());
 
     // Act
-    ResponseEntity<Map<String, String>> response = globalExceptionHandler.handleValidationExceptions(ex);
+    ResponseEntity<Map<String, String>> response = customExceptionHandler.handleValidationExceptions(ex);
 
     // Assert
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -45,23 +44,10 @@ class GlobalExceptionHandlerTest {
     };
 
     // Act
-    ResponseEntity<String> response = globalExceptionHandler.handleJsonProcessingException(exception);
+    ResponseEntity<String> response = customExceptionHandler.handleJsonProcessingException(exception);
 
     // Assert
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     assertEquals("Error with processing JSON", response.getBody());
-  }
-
-  @Test
-  void handleGeneralException_Exception_InternalServerError() {
-    // Arrange
-    Exception exception = new Exception("General error");
-
-    // Act
-    ResponseEntity<String> response = globalExceptionHandler.handleGeneralException(exception);
-
-    // Assert
-    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-    assertEquals("Internal server error", response.getBody());
   }
 }

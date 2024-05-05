@@ -17,10 +17,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
-@Order(Ordered.LOWEST_PRECEDENCE)
 @Slf4j
-public class GlobalExceptionHandler {
+public class CustomExceptionHandler {
 
+  @Order(Ordered.HIGHEST_PRECEDENCE)
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException e) {
     Map<String, String> errors = new HashMap<>();
@@ -34,17 +34,11 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
   }
 
+  @Order(Ordered.HIGHEST_PRECEDENCE)
   @ExceptionHandler(JsonProcessingException.class)
   public ResponseEntity<String> handleJsonProcessingException(JsonProcessingException e) {
     log.error("Error with processing JSON: {}", e.getMessage());
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error with processing JSON");
-  }
-
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<String> handleGeneralException(Exception e) {
-    log.error("Error: {}", e.getMessage());
-
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
   }
 }
