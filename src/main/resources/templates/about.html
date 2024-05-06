@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>About Page</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f4f4f9;
+    }
+    #readmeContent {
+        white-space: pre-wrap;
+        background: #ffffff;
+        padding: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+    <h2>User Grid README</h2>
+    <div id="readmeContent">Loading...</div>
+
+    <script>
+        fetch('/users/about')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch content');
+            }
+            return response.text();
+        })
+        .then(data => {
+            document.getElementById('readmeContent').textContent = data;
+        })
+        .catch(error => {
+            document.getElementById('readmeContent').textContent = 'Error: ' + error.message;
+        });
+    </script>
+</body>
+</html>

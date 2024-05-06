@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Delete user</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f4f4f9;
+        text-align: center;
+    }
+    label, input, button {
+        margin-top: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    input, button {
+        width: 200px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    #userInfo p {
+        color: #333;
+        font-size: 16px;
+    }
+    #userInfo {
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+    <h2>Delete user</h2>
+    <form id="searchForm">
+        <label for="userId">Enter user ID:</label>
+        <input type="number" id="userId" name="userId" required><br>
+        <button type="button" onclick="findUser()">Search</button>
+    </form>
+    <div id="userInfo"></div>
+
+    <script>
+        function findUser() {
+            const userId = document.getElementById('userId').value;
+
+            fetch(`/users/find/byId?userId=${userId}`)
+            .then(response => response.json())
+            .then(user => {
+                const userInfo = document.getElementById('userInfo');
+                userInfo.innerHTML = `
+                    <p>ID: ${user.userId}</p>
+                    <p>First name: ${user.firstName}</p>
+                    <p>Last name: ${user.lastName}</p>
+                    <p>Email: ${user.email}</p>
+                    <p>Birth date: ${user.birthDate}</p>
+                    <p>Address: ${user.address || ''}</p>
+                    <p>Phone number: ${user.phoneNumber || ''}</p>
+                    <p>Are you sure you want to delete this user?</p>
+                    <button onclick="deleteUser(${user.userId})" style="background-color: #f44336;">Yes</button>
+                    <button onclick="cancelDelete()" style="background-color: #9E9E9E;">No</button>
+                `;
+            })
+            .catch(error => {
+                document.getElementById('userInfo').innerHTML = '<p>User not found.</p>';
+            });
+        }
+
+        function deleteUser(userId) {
+            fetch(`/users/${userId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('userInfo').innerHTML = '<p>User deleted successfully.</p>';
+                } else {
+                    document.getElementById('userInfo').innerHTML = '<p>Failed to delete user.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('userInfo').innerHTML = '<p>Error while deleting user.</p>';
+            });
+        }
+
+        function cancelDelete() {
+            document.getElementById('userInfo').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

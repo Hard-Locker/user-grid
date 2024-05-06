@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>List users</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+</style>
+</head>
+<body>
+    <h2>List users</h2>
+    <div id="usersContainer"></div>
+
+    <script>
+        fetch('/users/find/all')
+        .then(response => response.json())
+        .then(users => {
+            const container = document.getElementById('usersContainer');
+            if (users.length === 0) {
+                container.innerHTML = '<p>User list is empty</p>';
+            } else {
+                const table = document.createElement('table');
+                table.innerHTML = `
+                    <tr>
+                        <th>ID</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Email</th>
+                        <th>Birth date</th>
+                        <th>Address</th>
+                        <th>Phone number</th>
+                    </tr>
+                `;
+                users.forEach(user => {
+                    const row = table.insertRow();
+                    row.innerHTML = `
+                        <td>${user.userId}</td>
+                        <td>${user.firstName}</td>
+                        <td>${user.lastName}</td>
+                        <td>${user.email}</td>
+                        <td>${user.birthDate}</td>
+                        <td>${user.address || ''}</td>
+                        <td>${user.phoneNumber || ''}</td>
+                    `;
+                });
+                container.appendChild(table);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('usersContainer').innerHTML = '<p>Error loading user list.</p>';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Action</h1>
+    <button onclick="window.location.href='/about'">About</button>
+    <button onclick="window.location.href='/form/add'">Add user</button>
+    <button onclick="window.location.href='/form/update'">Update user</button>
+    <button onclick="window.location.href='/form/delete'">Delete user</button>
+    <button onclick="window.location.href='/find/find-all-users'">Show all users</button>
+    <button onclick="window.location.href='/find/find-by-birth-date-range'">Find users by birth date range</button>
+</body>
+</html>
