@@ -44,7 +44,7 @@ public class UserController {
   public ResponseEntity<String> about() {
     Path path = Paths.get("README");
     String about;
-    
+
     try {
       about = Files.readString(path);
       log.info("README file read successfully.");
@@ -55,13 +55,6 @@ public class UserController {
 
     return ResponseEntity.ok(about);
   }
-
-//  public ResponseEntity<String> about() {
-//    String about = "Hello";
-//    log.debug("Was call @GetMapping with data: " + about);
-//
-//    return ResponseEntity.ok(about);
-//  }
 
   @PostMapping("/add")
   public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult result) {
