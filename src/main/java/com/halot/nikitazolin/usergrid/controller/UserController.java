@@ -1,5 +1,9 @@
 package com.halot.nikitazolin.usergrid.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -38,11 +42,26 @@ public class UserController {
 
   @GetMapping("/about")
   public ResponseEntity<String> about() {
-    String about = "Hello";
-    log.debug("Was call @GetMapping with data: " + about);
+    Path path = Paths.get("README");
+    String about;
+    
+    try {
+      about = Files.readString(path);
+      log.info("README file read successfully.");
+    } catch (IOException e) {
+      log.error("Error reading README file", e);
+      return ResponseEntity.internalServerError().body("Error reading README file: " + e.getMessage());
+    }
 
     return ResponseEntity.ok(about);
   }
+
+//  public ResponseEntity<String> about() {
+//    String about = "Hello";
+//    log.debug("Was call @GetMapping with data: " + about);
+//
+//    return ResponseEntity.ok(about);
+//  }
 
   @PostMapping("/add")
   public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult result) {
