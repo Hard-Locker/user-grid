@@ -105,8 +105,8 @@ public class UserController {
     }
   }
 
-  @GetMapping("/find/{userId}")
-  public ResponseEntity<User> findUserById(@PathVariable Long userId) {
+  @GetMapping("/find/byId")
+  public ResponseEntity<User> findUserById(@RequestParam Long userId) {
     log.info("Searching user by ID: {}", userId);
     Optional<User> user = userService.findUserById(userId);
 

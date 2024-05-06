@@ -54,7 +54,7 @@
         function findUser() {
             const userId = document.getElementById('userId').value;
 
-            fetch(`/users/find/${userId}`)
+            fetch(`/users/find/byId?userId=${userId}`)
             .then(response => response.json())
             .then(user => {
                 const userInfo = document.getElementById('userInfo');

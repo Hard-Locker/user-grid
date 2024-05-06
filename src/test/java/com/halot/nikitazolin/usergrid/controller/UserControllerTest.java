@@ -213,6 +213,33 @@ class UserControllerTest {
   }
 
   @Test
+  void findUserById_UserExists_Ok() throws Exception {
+    // Arrange
+    Long userId = 1L;
+    User foundUser = new User();
+    foundUser.setUserId(userId);
+    when(userService.findUserById(userId)).thenReturn(Optional.of(foundUser));
+
+    // Act & Assert
+    mockMvc.perform(get("/users/find/byId").param("userId", String.valueOf(userId))).andExpect(status().isOk())
+        .andExpect(jsonPath("$.userId").value(userId));
+
+    verify(userService).findUserById(userId);
+  }
+
+  @Test
+  void findUserById_UserNotFound_NotFound() throws Exception {
+    // Arrange
+    Long userId = 1L;
+    when(userService.findUserById(userId)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    mockMvc.perform(get("/users/find/byId").param("userId", String.valueOf(userId))).andExpect(status().isNotFound());
+
+    verify(userService).findUserById(userId);
+  }
+
+  @Test
   void findUsersByBirthDates_UsersExists_Ok() throws Exception {
     // Arrange
     LocalDate beginDate = LocalDate.of(1990, 1, 1);
