@@ -10,7 +10,7 @@ To do this, you need to select a profile in application.yml
 "external" for external server.
 
 For greater control of the transmitted data, it is recommended to use programs for generating queries (for example Postman).
-Frontend pages may not be accurate.
+Frontend pages may not be accurate. Default home page: http://localhost:8080/menu
 
 ## Features
 
